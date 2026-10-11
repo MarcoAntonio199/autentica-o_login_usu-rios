@@ -85,7 +85,7 @@ export async function login(req,res){
                 // palavra chave da jwt
                 process.env.JWT_SECRET,
                 // expiração do token
-                {expiresIn: '2h' }
+                {expiresIn: '1h' }
             )
 
             return res.json({
@@ -102,3 +102,19 @@ export async function login(req,res){
 } 
 
 // agora que temos o token podemos criar roteas e funções que só podem ser acessadas se houver a autenticação
+
+
+export async function listarUsuario(req,res){
+    try {
+
+        const [usuarios] = await pool.query(
+            'SELECT id ,usuario, criado_em FROM usuarios ORDER BY id'
+        )
+
+        return res.json(usuarios)
+        
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({mensagem: 'Erro ao listar os usuários'})
+    }
+}
